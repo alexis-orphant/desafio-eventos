@@ -7,25 +7,25 @@ class Electrodomesticos {
         this.price = price;
         this.stock= stock;
         this.cuotas = cuotas || 0;
-        this.precio_final_cuotas = 0;
+        this.precioFinalCuotas = 0;
     }
     // metodo
     calcularPrecioCuotas(){
         switch(this.cuotas) {
             case "3":
                 let cuota3 = (this.precio / 3);
-                this.precio_final_cuotas = Math.round(cuota3 * 1.05);
+                this.precioFinalCuotas = Math.round(cuota3 * 1.05);
                 break;
             case "6":
                 let cuota6 = (this.precio / 6);
-                this.precio_final_cuotas = Math.round(cuota6 * 1.15);
+                this.precioFinalCuotas = Math.round(cuota6 * 1.15);
                 break;
             case "12":
                 let cuota12 = (this.precio / 12);
-                this.precio_final_cuotas = Math.round(cuota12 * 1.40);
+                this.precioFinalCuotas = Math.round(cuota12 * 1.40);
                 break;
         }
-        return this.precio_final_cuotas;
+        return this.precioFinalCuotas;
     }
 }
 
@@ -56,27 +56,24 @@ for(const producto of productos){
                 <h3>El precio es: ${producto.price}</h3>
                 <p>Seleccione la cantidad de cuotas: 
                     <select id=${producto.id}>
+                        <option value="">Seleccione las cuotas</option>
                         <option value="3">3 cuotas</option>
                         <option value="6">6 cuotas</option>
                         <option value="12">12 cuotas</option>
                     </select>
                 </p>
-                <p>El precio de cada cuota es: $${producto.precio_final_cuotas}</p>
+                <p>El precio de cada cuota es: $${producto.precioFinalCuotas}</p>
                 `
-    // agregamos el div al div del html
-                divContenedor.append(div)
-                // recibimos el cambio del select
-                
-    
-                //creamos el evento para que al seleccionar la cantidad de cuotas cambie el precio
-            const select = document.getElementById(`${producto.id}`)
+                console.log(producto.precioFinalCuotas)
+        // agregamos el div al div del html
+        divContenedor.append(div)
 
-            //funcion que retorne el valor del select 
-            function valorSelect(){
-                return select.value
-            }
-            console.log(valorSelect())
-    
-            select.addEventListener("change", valorSelect);
+        //constante sobre la que vamos a aplicar el evento
+        const select = document.getElementById(`${producto.id}`)
 
+        //funcion que retorne el valor del select 
+        function cambioCuotas(){return select.value}
+        // evento que cambia segun el valor del select
+        select.addEventListener("change", () => cambioCuotas(select.value, producto.id));
+        
 }
