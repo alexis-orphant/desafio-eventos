@@ -1,17 +1,21 @@
 // CLASE CONSTRUCTORA
 class Electrodomesticos {
-    constructor(id, category, name, price, stock, cuotas){
+    constructor(id, category, name, precio, stock, cuotas){
         this.id = id;
         this.category = category;
         this.name = name;
-        this.price = price;
+        this.precio = precio;
         this.stock= stock;
         this.cuotas = cuotas || 0;
-        this.precioFinalCuotas = 0;
+        this.precioFinalCuotas = "Seleccione las cuotas";
     }
     // metodo
     calcularPrecioCuotas(){
         switch(this.cuotas) {
+            case "1": 
+                const seleccionar = "Seleccione las cuotas"
+                this.precioFinalCuotas = seleccionar;
+                break;
             case "3":
                 let cuota3 = (this.precio / 3);
                 this.precioFinalCuotas = Math.round(cuota3 * 1.05);
@@ -28,14 +32,13 @@ class Electrodomesticos {
         return this.precioFinalCuotas;
     }
 }
-
 // ARRAY QUE VA A CONTENER LOS PRODUCTOS
 const productos = [];
 
 
 // CREO LOS PRODUCTOS
-const electroD1 = new Electrodomesticos(1, "Tecnologia", "Televisor", 35000, 5);
-const electroD2 = new Electrodomesticos(2, "Tecnologia", "PlayStation 5", 80000, 3);
+const electroD1 = new Electrodomesticos(1, "Tecnologia", "Televisor", 35000, 5,);
+const electroD2 = new Electrodomesticos(2, "Tecnologia", "PlayStation 5", 80000,);
 const electroD3 = new Electrodomesticos(3, "Tecnologia", "Notebook", 68000, 7);
 
 // CARGO LOS PRODUCTOS AL ARRAY
@@ -53,27 +56,32 @@ for(const producto of productos){
     div.innerHTML = `
                 <h2 class="categoria">La categoría del producto es: ${producto.category}</h2>
                 <h3>El nombre del producto es: ${producto.name}</h3>
-                <h3>El precio es: ${producto.price}</h3>
+                <h3>El precio es: ${producto.precio}</h3>
                 <p>Seleccione la cantidad de cuotas: 
                     <select id=${producto.id}>
-                        <option value="">Seleccione las cuotas</option>
+                        <option value="1">Seleccione las cuotas</option>
                         <option value="3">3 cuotas</option>
                         <option value="6">6 cuotas</option>
                         <option value="12">12 cuotas</option>
                     </select>
                 </p>
-                <p>El precio de cada cuota es: $${producto.precioFinalCuotas}</p>
+                <p id=precio-${producto.id}>El precio de cada cuota es: $ ${producto.precioFinalCuotas}</p>
                 `
-                console.log(producto.precioFinalCuotas)
         // agregamos el div al div del html
         divContenedor.append(div)
 
         //constante sobre la que vamos a aplicar el evento
         const select = document.getElementById(`${producto.id}`)
 
-        //funcion que retorne el valor del select 
-        function cambioCuotas(){return select.value}
-        // evento que cambia segun el valor del select
-        select.addEventListener("change", () => cambioCuotas(select.value, producto.id));
-        
+        // evento (cambia el precio de las cuotas segun lo seleccionado en el select)
+        select.addEventListener("change", () => {
+            //paso lo parametros que cambio
+            cambioCuotas(select.value, producto)  
+        })
+}
+// recibe los parametros y muestra el precio
+function cambioCuotas(cantCuotas, producto){
+    producto.cuotas = cantCuotas;
+    const precioFinalCuotas = producto.calcularPrecioCuotas();
+    document.getElementById(`precio-${producto.id}`).innerHTML = `El precio de cada cuota es: $ ${precioFinalCuotas}`
 }
